@@ -13,17 +13,19 @@ def my_raw_input(stdscr, r, c, prompt_string): #https://stackoverflow.com/questi
     return input  #       ^^^^  reading input at next line  
 
 def makeGrid(grid_h,grid_w): #cria a matrix e importa padrões
-    grid = [[0 for y in range(grid_w)] for x in range(grid_h)]
-    pattern = int(my_raw_input(stdscr, 0,0, "Number of pattern (2 all random): "))
+    pattern = int(my_raw_input(stdscr, 0,0, "Number of pattern (3 all random): "))
     match pattern:
         case 0:
-            pass
+            grid = [[0 for y in range(grid_w)] for x in range(grid_h)]
         case 1:
+            grid = [[1 for y in range(grid_w)] for x in range(grid_h)]
+        case 2:
+            grid = [[0 for y in range(grid_w)] for x in range(grid_h)]
             grid[(grid_h//2)-1][grid_w//2] = 1
             grid[grid_h//2][grid_w//2] = 1
             grid[(grid_h//2)+1][grid_w//2] = 1
-        case 2: 
-            grid = [[random.randint(0,1) for y in range( grid_w)] for x in range(grid_h)]
+        case 3: 
+            grid = [[random.randint(0,1) for x in range( grid_w)] for y in range(grid_h)]
     return grid
 
 def printMatrix(matrix): #printa as matrix direito
@@ -32,7 +34,7 @@ def printMatrix(matrix): #printa as matrix direito
 
 def printSim(matrix): #printa as matrix de símbolos
     stdscr.clear()
-    for x in range(grid_w): #não entendi pq so funciona com grid_w
+    for x in range(grid_h): #não entendi pq so funciona com grid_w
         stdscr.addstr(x, 0, ( ' '.join(matrix[x])))
         stdscr.refresh()
 
@@ -84,13 +86,14 @@ def convertSimbols(state): #converte os valores numéricos em simbolo unicode
         return '■'
     pass
 
-def generations(grid,generations): #cria uma nova matrix baseada na anterior da lista, criando um histórico das gerações
+def generations(grid,tick): #cria uma nova matrix baseada na anterior da lista, criando um histórico das gerações
     
     history = []
     history.append(grid)
     #print('Generation 1:')
     grid_sim = [[convertSimbols(state) for state in list] for list in grid]
     printSim(grid_sim)
+    '''
     if generations != 0:
         for x in range(1, generations):
             history.append(evolution(history[0]))
@@ -100,26 +103,28 @@ def generations(grid,generations): #cria uma nova matrix baseada na anterior da 
             printSim(grid_sim)
             time.sleep(1)
     else:
-        x = 1 #so pra marcar o número de gerações
-        while True:
+    '''
+    while True:
             history.append(evolution(history[0]))
-            #print(f'Generation {x+1}:')
+ 
             grid_sim = [[convertSimbols(state) for state in list] for list in history[0]]
             history.pop(0) #deleta o desatulizado da lista, não cirar uma lista gigante
             printSim(grid_sim)
-            x += 1
-            time.sleep(1)
+            time.sleep(1/tick)
 
 #preciso das variaveis disponiveis globalmente :)
 grid_size = int(my_raw_input(stdscr, 0,0, "Custom size (1 or 0): "))
 if grid_size != 0: 
     grid_h = int(my_raw_input(stdscr, 0,0, "Grid height "))
-    grid_w = int(my_raw_input(stdscr, 0,0, "Grid width: ")) +2
+    grid_w = int(my_raw_input(stdscr, 0,0, "Grid width: ")) 
 else:
-    grid_w, grid_h = stdscr.getmaxyx()
+    grid_h, grid_w = stdscr.getmaxyx()
+    grid_h += -1
+    grid_w += -1
+
 
 def main():
-    generations(makeGrid(grid_h, grid_w), int(my_raw_input(stdscr, 0,0, "Number of generations: ")))
+    generations(makeGrid(grid_h, grid_w),float(my_raw_input(stdscr,0,0,"Ticks per second: ")))
 
 if __name__ == '__main__':
     main()
