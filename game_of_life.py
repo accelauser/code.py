@@ -3,6 +3,9 @@ import random
 import time
 import curses # bagulho pra fazer os icones aparecem no mesmo lugar no terminal, funciona sem ele mas precisa de alterações 
 stdscr = curses.initscr()
+grid_h, grid_w = stdscr.getmaxyx()
+grid_h += -1
+grid_w += -1
 
 def my_raw_input(stdscr, r, c, prompt_string): #https://stackoverflow.com/questions/21784625/how-to-input-a-word-in-ncurses-screen
     stdscr.clear()
@@ -14,6 +17,7 @@ def my_raw_input(stdscr, r, c, prompt_string): #https://stackoverflow.com/questi
 
 def makeGrid(grid_h,grid_w): #cria a matrix e importa padrões
     pattern = int(my_raw_input(stdscr, 0,0, "Number of pattern (3 all random): "))
+    grid = []
     match pattern:
         case 0:
             grid = [[0 for y in range(grid_w)] for x in range(grid_h)]
@@ -36,7 +40,7 @@ def printSim(matrix): #printa as matrix de símbolos
     stdscr.clear()
     for x in range(grid_h): #não entendi pq so funciona com grid_w
         stdscr.addstr(x, 0, ( ' '.join(matrix[x])))
-        stdscr.refresh()
+    stdscr.refresh()
 
 def count_neighbors(grid, row, col): #conta o número de vizinhos vivos (chatgpt)
 
@@ -106,22 +110,11 @@ def generations(grid,tick): #cria uma nova matrix baseada na anterior da lista, 
     '''
     while True:
             history.append(evolution(history[0]))
- 
             grid_sim = [[convertSimbols(state) for state in list] for list in history[0]]
             history.pop(0) #deleta o desatulizado da lista, não cirar uma lista gigante
             printSim(grid_sim)
             time.sleep(1/tick)
-
-#preciso das variaveis disponiveis globalmente :)
-grid_size = int(my_raw_input(stdscr, 0,0, "Custom size (1 or 0): "))
-if grid_size != 0: 
-    grid_h = int(my_raw_input(stdscr, 0,0, "Grid height "))
-    grid_w = int(my_raw_input(stdscr, 0,0, "Grid width: ")) 
-else:
-    grid_h, grid_w = stdscr.getmaxyx()
-    grid_h += -1
-    grid_w += -1
-
+	    
 
 def main():
     generations(makeGrid(grid_h, grid_w),float(my_raw_input(stdscr,0,0,"Ticks per second: ")))
