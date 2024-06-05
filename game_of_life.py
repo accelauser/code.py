@@ -16,8 +16,8 @@ def my_raw_input(stdscr, r, c, prompt_string): #https://stackoverflow.com/questi
     return input  #       ^^^^  reading input at next line  
 
 def makeGrid(grid_h,grid_w): #cria a matrix e importa padrões
-    pattern = int(my_raw_input(stdscr, 0,0, "Number of pattern (3 all random): "))
-    grid = []
+#    pattern = int(my_raw_input(stdscr, 0,0, "Number of pattern (3 all random): "))
+    '''
     match pattern:
         case 0:
             grid = [[0 for y in range(grid_w)] for x in range(grid_h)]
@@ -29,7 +29,8 @@ def makeGrid(grid_h,grid_w): #cria a matrix e importa padrões
             grid[grid_h//2][grid_w//2] = 1
             grid[(grid_h//2)+1][grid_w//2] = 1
         case 3: 
-            grid = [[random.randint(0,1) for x in range( grid_w)] for y in range(grid_h)]
+    '''
+    grid = [[random.randint(0,1) for x in range( grid_w)] for y in range(grid_h)]
     return grid
 
 def printMatrix(matrix): #printa as matrix direito

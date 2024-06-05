@@ -3,7 +3,8 @@ import matplotlib.pyplot as plt
 import numpy as np 
 
 n_indiv = int(input('Quantos individuos existem na amostra:  '))
-n_gera = int(input('Quantas gerações existem na amostra:  '))
+#n_gera = int(input('Quantas gerações existem na amostra:  '))
+n_gera = int(n_indiv * 0.5)
 geração = []
 x_axis = []
 repetições = []
@@ -53,12 +54,14 @@ plt.ylim([-0.5, 1 ]) #limita o tamanho do eixo y
 for x in range(n_alelos): #passa por todas gerações pra gerar individualemnte os gráficos dos alelos 
     plt.plot(x_axis, repetições[x], label = f'Alelo {x+1}') #cria a legenda pra cada linha
 
+''''
 plt.figure()  # Create a new figure for each generatio n 
 plt.title(f"Quantidade de alelos ao longo das gerações")
 plt.xlim([1,n_gera+1]) #limita o tamanho do eixo X
 plt.ylim([-1, n_alelos+1]) #limita o tamanho do eixo y
 for x in range(n_alelos): #passa por todas gerações pra gerar individualemnte os gráficos dos alelos 
     plt.plot(x_axis, absoluto[x], label = f'Alelo {x+1}') #cria a legenda pra cada linha
+'''
 
 #plt.legend(loc='upper left') #mostra a legenda
 plt.show() #cria a janela para mostrar o gŕafico 
