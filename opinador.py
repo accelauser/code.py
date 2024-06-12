@@ -1,4 +1,5 @@
 #deveria usar windows ou linux:
+#teste commit
 import random 
 def main():
     n_opções = int(input('número de opções: '))
